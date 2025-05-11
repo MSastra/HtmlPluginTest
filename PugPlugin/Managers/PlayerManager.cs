@@ -1,7 +1,6 @@
-﻿using CounterStrikeSharp.API;
-using CounterStrikeSharp.API.Core;
+﻿using CounterStrikeSharp.API.Core;
 using PugPlugin.Entities;
-using PugPlugin.Extensions;
+using System.Text;
 
 namespace PugPlugin.Managers;
 

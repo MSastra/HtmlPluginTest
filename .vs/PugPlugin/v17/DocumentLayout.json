@@ -1,0 +1,91 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\PC\\source\\repos\\PugPlugin-CSSharp\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{B3C2B921-688F-4631-AB95-664822780650}|PugPlugin\\PugPlugin.csproj|c:\\users\\pc\\source\\repos\\pugplugin-cssharp\\pugplugin\\menu\\menu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B3C2B921-688F-4631-AB95-664822780650}|PugPlugin\\PugPlugin.csproj|solutionrelative:pugplugin\\menu\\menu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B3C2B921-688F-4631-AB95-664822780650}|PugPlugin\\PugPlugin.csproj|c:\\users\\pc\\source\\repos\\pugplugin-cssharp\\pugplugin\\menu\\setup\\captainpickplayermenu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B3C2B921-688F-4631-AB95-664822780650}|PugPlugin\\PugPlugin.csproj|solutionrelative:pugplugin\\menu\\setup\\captainpickplayermenu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B3C2B921-688F-4631-AB95-664822780650}|PugPlugin\\PugPlugin.csproj|c:\\users\\pc\\source\\repos\\pugplugin-cssharp\\pugplugin\\pugplugin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B3C2B921-688F-4631-AB95-664822780650}|PugPlugin\\PugPlugin.csproj|solutionrelative:pugplugin\\pugplugin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "CaptainPickPlayerMenu.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\source\\repos\\PugPlugin-CSSharp\\PugPlugin\\Menu\\Setup\\CaptainPickPlayerMenu.cs",
+              "RelativeDocumentMoniker": "PugPlugin\\Menu\\Setup\\CaptainPickPlayerMenu.cs",
+              "ToolTip": "C:\\Users\\PC\\source\\repos\\PugPlugin-CSSharp\\PugPlugin\\Menu\\Setup\\CaptainPickPlayerMenu.cs",
+              "RelativeToolTip": "PugPlugin\\Menu\\Setup\\CaptainPickPlayerMenu.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-10T08:20:16.404Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "PugPlugin.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\source\\repos\\PugPlugin-CSSharp\\PugPlugin\\PugPlugin.cs",
+              "RelativeDocumentMoniker": "PugPlugin\\PugPlugin.cs",
+              "ToolTip": "C:\\Users\\PC\\source\\repos\\PugPlugin-CSSharp\\PugPlugin\\PugPlugin.cs",
+              "RelativeToolTip": "PugPlugin\\PugPlugin.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAA5wCQAAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-10T08:01:55.277Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Menu.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\source\\repos\\PugPlugin-CSSharp\\PugPlugin\\Menu\\Menu.cs",
+              "RelativeDocumentMoniker": "PugPlugin\\Menu\\Menu.cs",
+              "ToolTip": "C:\\Users\\PC\\source\\repos\\PugPlugin-CSSharp\\PugPlugin\\Menu\\Menu.cs",
+              "RelativeToolTip": "PugPlugin\\Menu\\Menu.cs",
+              "ViewState": "AgIAAAcBAAAAAAAAAAAhwBQBAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-10T08:01:11.921Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{c9c0ae26-aa77-11d2-b3f0-0000f87570ee}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{de1fc918-f32e-4dd7-a915-1792a051f26b}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c64b9c2-e352-428e-a56d-0ace190b99a6}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
