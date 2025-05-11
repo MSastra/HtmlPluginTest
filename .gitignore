@@ -26,3 +26,4 @@ riderModule.iml
 /.vs/PugPlugin/DesignTimeBuild/.dtbcache.v2
 /.vs/PugPlugin/v17/DocumentLayout.backup.json
 /.vs/PugPlugin/v17/DocumentLayout.json
+*.vsidx

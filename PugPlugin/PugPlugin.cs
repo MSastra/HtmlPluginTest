@@ -22,10 +22,21 @@ public class PugPlugin : BasePlugin
 	private TeamManager _teamManager = new();
 
 	//Menus
-	private Captain1ChoiceMenu _captain1ChoiceMenu = new();
-	private PickFirstSideMenu _pickFirstSideMenu = new();
-	private CaptainPickPlayerMenu _captainPickPlayerMenu = new();
-	private TestMenu _testMenu = new();
+	private Captain1ChoiceMenu _captain1ChoiceMenu;
+	private PickFirstSideMenu _pickFirstSideMenu;
+	private CaptainPickPlayerMenu _captainPickPlayerMenu;
+	private TestMenu _testMenu;
+
+	public PugPlugin() : base()
+	{
+		_playerManager = new();
+		_gameManager = new();
+		_teamManager = new();
+		_captain1ChoiceMenu = new(this);
+		_pickFirstSideMenu = new(this);
+		_captainPickPlayerMenu = new(this);
+		_testMenu = new(this);
+	}
 
 	public override void Load(bool hotReload)
 	{
