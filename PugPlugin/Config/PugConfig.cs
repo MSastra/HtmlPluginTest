@@ -2,5 +2,5 @@
 
 public static class PugConfig
 {
-    public static string ChatPrefix = "[PugPlugin]";
+    public static string ChatPrefix = "[Geostrike]";
 }

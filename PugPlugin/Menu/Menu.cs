@@ -3,6 +3,7 @@ using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Commands;
 using CounterStrikeSharp.API.Modules.Entities;
 using PugPlugin.Config;
+using PugPlugin.Managers;
 
 namespace PugPlugin.Menu;
 
@@ -180,19 +181,19 @@ public abstract class Menu<T>
     {
         if (showTitle)
         {
-            player.PrintToChat(_title);
+            PlayerManager.PrintToHtmlPlayer(player, _title);
         }
 
         List<Tuple<string, T>> options = GetOptions(showTitle, showExit, player.SteamID, doPushLastIndex);
 
         foreach (Tuple<string, T> option in options)
         {
-            player.PrintToChat(option.Item1);
+            PlayerManager.PrintToHtmlPlayer(player, option.Item1);
         }
 
         if (showExit)
         {
-            player.PrintToChat("[0] Exit");
+            PlayerManager.PrintToHtmlPlayer(player, $"Exit", "[0]");
         }
     }
 
@@ -287,9 +288,9 @@ public abstract class Menu<T>
                 _isExitPresent.Remove(player.SteamID);
                 _previousPageLastIndex.Remove(player.SteamID);
 
-                player.PrintToChat($"{PugConfig.ChatPrefix} Menu Exited");
-                
-            }
+				PlayerManager.PrintToHtmlPlayer(player, $"Menu Exited", PugConfig.ChatPrefix);
+
+			}
             else if (_isPreviousPresent[player.SteamID] && option - 1 == _previousIndex[player.SteamID])
             {
                 _currentPage[player.SteamID]--;

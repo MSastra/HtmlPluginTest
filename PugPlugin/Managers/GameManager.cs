@@ -22,9 +22,9 @@ public class GameManager
 
     public void StartGame()
     {
-        Server.PrintToChatAll($"{PugConfig.ChatPrefix} Teams are selected! Starting Game!");
-        
-        _gameState = 3;
+		PlayerManager.PrintToHtmlAll($"{PugConfig.ChatPrefix} Teams are selected! Starting Game!");
+
+		_gameState = 3;
         Server.ExecuteCommand("bot_autodifficulty_threshold_high 0.0");
         Server.ExecuteCommand("bot_autodifficulty_threshold_low -2.0");
         Server.ExecuteCommand("bot_chatter normal");
@@ -136,7 +136,7 @@ public class GameManager
     
     public void StartSetupRound()
     {
-        Server.PrintToChatAll($"{PugConfig.ChatPrefix} All players are ready, starting captain selection knife round!");
+        PlayerManager.PrintToHtmlAll($"{PugConfig.ChatPrefix} Captains are selected. starting team selection!");
         
         //setup setup warmup, reset settings from captain round
         _gameState = 2;
@@ -165,7 +165,8 @@ public class GameManager
     public void StartCaptainSelectRound()
     {
         _isStarted = true;
-        Server.PrintToChatAll($"{PugConfig.ChatPrefix} All players are ready, starting captain selection knife round!");
+		PlayerManager.PrintToHtmlAll($"{PugConfig.ChatPrefix} All players are ready, starting captain selection knife round!");
+
         
         //setup captains match
         _gameState = 1;

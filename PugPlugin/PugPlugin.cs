@@ -100,7 +100,7 @@ public class PugPlugin: BasePlugin
 
         if (_gameManager.GetGameState() == 1 || _gameManager.GetGameState() == 2)
         {
-            Server.PrintToChatAll($"{PugConfig.ChatPrefix} Player count dropped below 10 during setup, resetting while server waits for more players!");
+            PlayerManager.PrintToHtmlAll($"{PugConfig.ChatPrefix} Player count dropped below 10 during setup, resetting while server waits for more players!", PugConfig.ChatPrefix);
             
             //Reset back to warmup/ready up state until 10 players connect again
             _gameManager.Cleanup();
@@ -157,18 +157,18 @@ public class PugPlugin: BasePlugin
 
         if (_playerManager.SetReady(player))
         {
-            player.PrintToChat($"{PugConfig.ChatPrefix} Set status to Ready!");
+            PlayerManager.PrintToHtmlPlayer(player, $"Set status to Ready!", PugConfig.ChatPrefix);
             player.PrintToConsole($"{PugConfig.ChatPrefix} Set status to Ready!");
-            Server.PrintToChatAll($"{PugConfig.ChatPrefix} {_playerManager.GetReadyCount()}/{_playerManager.GetPlayerCount()} Players Ready. {player.PlayerName} set to Ready!");
-            
-            if (_playerManager.IsServerFull() && _playerManager.IsServerReady())
+            PlayerManager.PrintToHtmlAll($"{_playerManager.GetReadyCount()}/{_playerManager.GetPlayerCount()} Players Ready. {player.PlayerName} set to Ready!", PugConfig.ChatPrefix);
+
+			if (_playerManager.IsServerFull() && _playerManager.IsServerReady())
             {
                 _gameManager.StartCaptainSelectRound();
             }
         }
         else
         {
-            player.PrintToChat($"{PugConfig.ChatPrefix} Status already set to Ready (!ur/!unready to Unready).");
+            PlayerManager.PrintToHtmlPlayer(player, $"Status already set to Ready (!ur/!unready to Unready).", PugConfig.ChatPrefix);
             player.PrintToConsole($"{PugConfig.ChatPrefix} Status already set to Ready (!ur/!unready to Unready).");
         }
     }
@@ -181,13 +181,13 @@ public class PugPlugin: BasePlugin
 
         if (_playerManager.SetUnready(player))
         {
-            player.PrintToChat($"{PugConfig.ChatPrefix} Set status to Unready!");
+            PlayerManager.PrintToHtmlPlayer(player, $"Set status to Unready!", PugConfig.ChatPrefix);
             player.PrintToConsole($"{PugConfig.ChatPrefix} Set status to Unready!");
-            Server.PrintToChatAll($"{PugConfig.ChatPrefix} {_playerManager.GetReadyCount()}/{_playerManager.GetPlayerCount()} Players Ready. {player.PlayerName} set to Unready.");
-        }
-        else
+            PlayerManager.PrintToHtmlAll($"{_playerManager.GetReadyCount()}/{_playerManager.GetPlayerCount()} Players Ready. {player.PlayerName} set to Unready.", PugConfig.ChatPrefix);
+		}
+		else
         {
-            player.PrintToChat($"{PugConfig.ChatPrefix} Status already set to Unready (!r/!ready to Ready).");
+            PlayerManager.PrintToHtmlPlayer(player, $"Status already set to Unready (!r/!ready to Ready).", PugConfig.ChatPrefix);
             player.PrintToConsole($"{PugConfig.ChatPrefix} Status already set to Unready (!r/!ready to Ready).");
         }
     }
@@ -211,7 +211,7 @@ public class PugPlugin: BasePlugin
         {
             if (_playerManager.GetAliveCount() == 2)
             {
-                Server.PrintToChatAll($"{PugConfig.ChatPrefix} Two remaining players will be team captains. The last remaining of the captains will choose if they get first player pick or first side pick.");
+                PlayerManager.PrintToHtmlAll($"Two remaining players will be team captains. The last remaining of the captains will choose if they get first player pick or first side pick.", PugConfig.ChatPrefix);
             }
 
             if (_playerManager.GetAliveCount() == 1)
@@ -221,8 +221,9 @@ public class PugPlugin: BasePlugin
                 _teamManager.SetCaptain2(target.SteamID);
                 _teamManager.AddPlayerToTeam2(target);
                 _gameManager.StartSetupRound();
-                Server.PrintToChatAll($"{PugConfig.ChatPrefix} Captain {_teamManager.GetCaptain1().PlayerController!.PlayerName} is now selecting 1st captain preference. (First Team or First Player)");
-                _captain1ChoiceMenu.Init(_teamManager.GetCaptain1().PlayerController!, false, Captain1ChoiceMenuCallback);
+                PlayerManager.PrintToHtmlAll($"Captain {_teamManager.GetCaptain1().PlayerController!.PlayerName} is now selecting 1st captain preference. (First Team or First Player)", PugConfig.ChatPrefix);
+
+				_captain1ChoiceMenu.Init(_teamManager.GetCaptain1().PlayerController!, false, Captain1ChoiceMenuCallback);
             }
         }
         
@@ -235,13 +236,13 @@ public class PugPlugin: BasePlugin
         if (result == 0)
         {
             _teamManager.SetTeam1CaptainPickFirstPlayer(false);
-            Server.PrintToChatAll($"{PugConfig.ChatPrefix} Captain {_teamManager.GetCaptain1().PlayerController!.PlayerName} picked First Team choice.");
+            PlayerManager.PrintToHtmlAll($"Captain {_teamManager.GetCaptain1().PlayerController!.PlayerName} picked First Team choice.", PugConfig.ChatPrefix);
             Server.NextFrame(() => _pickFirstSideMenu.Init(player, false, PickFirstSideMenuCallback));
         }
         else
         {
             _teamManager.SetTeam1CaptainPickFirstPlayer(true);
-            Server.PrintToChatAll($"{PugConfig.ChatPrefix} Captain {_teamManager.GetCaptain1().PlayerController!.PlayerName} picked First Player choice.");
+            PlayerManager.PrintToHtmlAll($"Captain {_teamManager.GetCaptain1().PlayerController!.PlayerName} picked First Player choice.", PugConfig.ChatPrefix);
             Server.NextFrame(() => _pickFirstSideMenu.Init(_teamManager.GetCaptain2().PlayerController!, false, PickFirstSideMenuCallback));
         }
     }
@@ -250,11 +251,11 @@ public class PugPlugin: BasePlugin
     {
         if (result == 0)
         {
-            Server.PrintToChatAll($"{PugConfig.ChatPrefix} Captain {player.PlayerName} picked team: Terrorist");
+			PlayerManager.PrintToHtmlAll($"Captain {player.PlayerName} picked team: Terrorist", PugConfig.ChatPrefix);
         }
         else
         {
-            Server.PrintToChatAll($"{PugConfig.ChatPrefix} Captain {player.PlayerName} picked team: Counter Terrorist");
+			PlayerManager.PrintToHtmlAll($"Captain {player.PlayerName} picked team: Counter Terrorist", PugConfig.ChatPrefix);
         }
         
         
@@ -288,12 +289,12 @@ public class PugPlugin: BasePlugin
         
         if (_teamManager.GetTeam1CaptainPickFirstPlayer())
         {
-            Server.PrintToChatAll($"{PugConfig.ChatPrefix} Captain {_teamManager.GetCaptain1().PlayerController!.PlayerName}'s turn to pick a player!");
-            Server.NextFrame(() => _captainPickPlayerMenu.Init(_teamManager.GetCaptain1().PlayerController!, false, CaptainPickPlayerMenuCallback));
+            PlayerManager.PrintToHtmlAll($"Captain {_teamManager.GetCaptain1().PlayerController!.PlayerName}'s turn to pick a player!", PugConfig.ChatPrefix);
+			Server.NextFrame(() => _captainPickPlayerMenu.Init(_teamManager.GetCaptain1().PlayerController!, false, CaptainPickPlayerMenuCallback));
         }
         else
         {
-            Server.PrintToChatAll($"{PugConfig.ChatPrefix} Captain {_teamManager.GetCaptain2().PlayerController!.PlayerName}'s turn to pick a player!");
+            PlayerManager.PrintToHtmlAll($"Captain {_teamManager.GetCaptain2().PlayerController!.PlayerName}'s turn to pick a player!", PugConfig.ChatPrefix);
             Server.NextFrame(() => _captainPickPlayerMenu.Init(_teamManager.GetCaptain2().PlayerController!, false, CaptainPickPlayerMenuCallback));
         }
     }
@@ -312,20 +313,20 @@ public class PugPlugin: BasePlugin
         if (_teamManager.GetCaptain1().PlayerController!.SteamID == menuPlayer.SteamID) //Team1
         {
             _teamManager.AddPlayerToTeam1(player);
-            Server.PrintToChatAll($"{PugConfig.ChatPrefix} Captain {_teamManager.GetCaptain1().PlayerController!.PlayerName} picked {player.PlayerName}.");
+			PlayerManager.PrintToHtmlAll($"Captain {_teamManager.GetCaptain1().PlayerController!.PlayerName} picked {player.PlayerName}.", PugConfig.ChatPrefix);
             if (_captainPickPlayerMenu.GetMenuItemCount() != 0)
             {
-                Server.PrintToChatAll($"{PugConfig.ChatPrefix} Captain {_teamManager.GetCaptain2().PlayerController!.PlayerName}'s turn to pick a player!");
+                PlayerManager.PrintToHtmlAll($"Captain {_teamManager.GetCaptain2().PlayerController!.PlayerName}'s turn to pick a player!", PugConfig.ChatPrefix);
                 Server.NextFrame(() => _captainPickPlayerMenu.Init(_teamManager.GetCaptain2().PlayerController!, false, CaptainPickPlayerMenuCallback));
             }
         }
         else //Team2
         {
             _teamManager.AddPlayerToTeam2(player);
-            Server.PrintToChatAll($"{PugConfig.ChatPrefix} Captain {_teamManager.GetCaptain2().PlayerController!.PlayerName} picked {player.PlayerName}.");
-            if (_captainPickPlayerMenu.GetMenuItemCount() != 0)
+			PlayerManager.PrintToHtmlAll($"Captain {_teamManager.GetCaptain2().PlayerController!.PlayerName} picked {player.PlayerName}.", PugConfig.ChatPrefix);
+			if (_captainPickPlayerMenu.GetMenuItemCount() != 0)
             {
-                Server.PrintToChatAll($"{PugConfig.ChatPrefix} Captain {_teamManager.GetCaptain1().PlayerController!.PlayerName}'s turn to pick a player!");
+                PlayerManager.PrintToHtmlAll($"Captain {_teamManager.GetCaptain1().PlayerController!.PlayerName}'s turn to pick a player!", PugConfig.ChatPrefix);
                 Server.NextFrame(() => _captainPickPlayerMenu.Init(_teamManager.GetCaptain1().PlayerController!, false, CaptainPickPlayerMenuCallback));
             }
         }
@@ -333,13 +334,13 @@ public class PugPlugin: BasePlugin
         //Player selection done, start game
         if (_captainPickPlayerMenu.GetMenuItemCount() == 0)
         {
-            //Assign Players to correct teams
-            Server.PrintToChatAll($"{PugConfig.ChatPrefix} Player selection complete moving players to correct teams.");
-            _teamManager.MovePlayersToTeams();
+			//Assign Players to correct teams
+			PlayerManager.PrintToHtmlAll($"Player selection complete moving players to correct teams.", PugConfig.ChatPrefix);
+			_teamManager.MovePlayersToTeams();
             
             //Start Game
-            Server.PrintToChatAll($"{PugConfig.ChatPrefix} Starting Match! glhf");
-            _gameManager.StartGame();
+			PlayerManager.PrintToHtmlAll($"Starting Match! glhf", PugConfig.ChatPrefix);
+			_gameManager.StartGame();
         }
     }
 }

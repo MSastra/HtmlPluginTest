@@ -1,4 +1,6 @@
-﻿using CounterStrikeSharp.API.Core;
+﻿using CounterStrikeSharp.API;
+using CounterStrikeSharp.API.Core;
+using PugPlugin.Config;
 using PugPlugin.Entities;
 using System.Text;
 
@@ -97,5 +99,18 @@ public class PlayerManager
         {
             return false;
         }
-    }
+	}
+
+    public static void PrintToHtmlAll(string message, string option = "", string color = "grey") 
+    { 
+		foreach (var player in Utilities.GetPlayers())
+		{
+			player.PrintToCenterHtml($"<font color='yellow'>{option}</font> <font color='{color}'>{message}</font>");
+		}
+	}
+
+	public static void PrintToHtmlPlayer(this CCSPlayerController player, string message, string option = "", string color = "grey")
+	{
+        player.PrintToCenterHtml($"<font color='yellow'>{option}</font> <font color='{color}'>{message}</font>");
+	}
 }
