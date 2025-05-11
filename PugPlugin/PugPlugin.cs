@@ -5,6 +5,7 @@ using CounterStrikeSharp.API.Modules.Commands;
 using PugPlugin.Config;
 using PugPlugin.Extensions;
 using PugPlugin.Managers;
+using PugPlugin.Managers.PugPlugin.Managers;
 using PugPlugin.Menu.Setup;
 
 namespace PugPlugin;
@@ -17,15 +18,26 @@ public class PugPlugin: BasePlugin
 
     public override string ModuleDescription => "Pug server setup plugin, automates the setup of 10man servers.";
 
-    private PlayerManager _playerManager = new();
-    private GameManager _gameManager = new();
-    private TeamManager _teamManager = new();
-    
+    private PlayerManager _playerManager;
+    private GameManager _gameManager;
+    private TeamManager _teamManager;
+
     //Menus
-    private Captain1ChoiceMenu _captain1ChoiceMenu = new();
-    private PickFirstSideMenu _pickFirstSideMenu = new();
-    private CaptainPickPlayerMenu _captainPickPlayerMenu = new();
-    private TestMenu _testMenu = new();
+    private Captain1ChoiceMenu _captain1ChoiceMenu;
+    private PickFirstSideMenu _pickFirstSideMenu;
+    private CaptainPickPlayerMenu _captainPickPlayerMenu;
+    private TestMenu _testMenu;
+
+    public PugPlugin() : base()
+    {
+		_playerManager = new();
+		_gameManager = new(this);
+		_teamManager = new();
+		_captain1ChoiceMenu = new(this);
+		_pickFirstSideMenu = new(this);
+		_captainPickPlayerMenu = new(this);
+		_testMenu = new(this);
+	}
     
     public override void Load(bool hotReload)
     {
@@ -100,10 +112,14 @@ public class PugPlugin: BasePlugin
 
         if (_gameManager.GetGameState() == 1 || _gameManager.GetGameState() == 2)
         {
-            PlayerManager.PrintToHtmlAll($"{PugConfig.ChatPrefix} Player count dropped below 10 during setup, resetting while server waits for more players!", PugConfig.ChatPrefix);
-            
-            //Reset back to warmup/ready up state until 10 players connect again
-            _gameManager.Cleanup();
+            HtmlMenuHelper.PrintHtmlMessageToAll(this,
+										message: $"{PugConfig.ChatPrefix} Player count dropped below 10 during setup, resetting while server waits for more players!",
+										onSelect: null,
+										disabled: true,
+										title: "Ready!");
+
+			//Reset back to warmup/ready up state until 10 players connect again
+			_gameManager.Cleanup();
             _teamManager.Cleanup();
             
             //Menus
@@ -157,9 +173,13 @@ public class PugPlugin: BasePlugin
 
         if (_playerManager.SetReady(player))
         {
-            PlayerManager.PrintToHtmlPlayer(player, $"Set status to Ready!", PugConfig.ChatPrefix);
+            //PlayerManager.PrintToHtmlPlayer(player, $"Set status to Ready!", PugConfig.ChatPrefix);
             player.PrintToConsole($"{PugConfig.ChatPrefix} Set status to Ready!");
-            PlayerManager.PrintToHtmlAll($"{_playerManager.GetReadyCount()}/{_playerManager.GetPlayerCount()} Players Ready. {player.PlayerName} set to Ready!", PugConfig.ChatPrefix);
+            HtmlMenuHelper.PrintHtmlMessageToAll(this,
+                                        message: $"{_playerManager.GetReadyCount()}/{_playerManager.GetPlayerCount()} Players Ready. {player.PlayerName} set to Ready!",
+                                        onSelect: null,
+                                        disabled: true,
+                                        title: "Ready!");
 
 			if (_playerManager.IsServerFull() && _playerManager.IsServerReady())
             {
@@ -168,8 +188,14 @@ public class PugPlugin: BasePlugin
         }
         else
         {
-            PlayerManager.PrintToHtmlPlayer(player, $"Status already set to Ready (!ur/!unready to Unready).", PugConfig.ChatPrefix);
-            player.PrintToConsole($"{PugConfig.ChatPrefix} Status already set to Ready (!ur/!unready to Unready).");
+			HtmlMenuHelper.PrintHtmlMessageToPlayer(this,
+                                        player: player,
+										message: "Status already set to Ready (!ur/!unready to Unready).",
+										onSelect: null,
+										disabled: true,
+										title: "Ready!");
+
+			player.PrintToConsole($"{PugConfig.ChatPrefix} Status already set to Ready (!ur/!unready to Unready).");
         }
     }
     
@@ -181,13 +207,22 @@ public class PugPlugin: BasePlugin
 
         if (_playerManager.SetUnready(player))
         {
-            PlayerManager.PrintToHtmlPlayer(player, $"Set status to Unready!", PugConfig.ChatPrefix);
+            //PlayerManager.PrintToHtmlPlayer(player, $"Set status to Unready!", PugConfig.ChatPrefix);
             player.PrintToConsole($"{PugConfig.ChatPrefix} Set status to Unready!");
-            PlayerManager.PrintToHtmlAll($"{_playerManager.GetReadyCount()}/{_playerManager.GetPlayerCount()} Players Ready. {player.PlayerName} set to Unready.", PugConfig.ChatPrefix);
+            HtmlMenuHelper.PrintHtmlMessageToAll(this,
+										message: $"{_playerManager.GetReadyCount()}/{_playerManager.GetPlayerCount()} Players Ready. {player.PlayerName} set to Unready.",
+										onSelect: null,
+										disabled: true,
+										title: "Ready!");
 		}
 		else
         {
-            PlayerManager.PrintToHtmlPlayer(player, $"Status already set to Unready (!r/!ready to Ready).", PugConfig.ChatPrefix);
+			HtmlMenuHelper.PrintHtmlMessageToPlayer(this,
+										player: player,
+										message: "Status already set to Unready (!r/!ready to Ready).",
+										onSelect: null,
+										disabled: true,
+										title: "Ready!");
             player.PrintToConsole($"{PugConfig.ChatPrefix} Status already set to Unready (!r/!ready to Ready).");
         }
     }
@@ -211,8 +246,12 @@ public class PugPlugin: BasePlugin
         {
             if (_playerManager.GetAliveCount() == 2)
             {
-                PlayerManager.PrintToHtmlAll($"Two remaining players will be team captains. The last remaining of the captains will choose if they get first player pick or first side pick.", PugConfig.ChatPrefix);
-            }
+                HtmlMenuHelper.PrintHtmlMessageToAll(this,
+													 message: $"Two remaining players will be team captains. The last remaining of the captains will choose if they get first player pick or first side pick.",
+													 onSelect: null,
+													 disabled: true,
+													 title: "Ready!");
+			}
 
             if (_playerManager.GetAliveCount() == 1)
             {
@@ -221,7 +260,11 @@ public class PugPlugin: BasePlugin
                 _teamManager.SetCaptain2(target.SteamID);
                 _teamManager.AddPlayerToTeam2(target);
                 _gameManager.StartSetupRound();
-                PlayerManager.PrintToHtmlAll($"Captain {_teamManager.GetCaptain1().PlayerController!.PlayerName} is now selecting 1st captain preference. (First Team or First Player)", PugConfig.ChatPrefix);
+                HtmlMenuHelper.PrintHtmlMessageToAll(this,
+										message: $"Captain {_teamManager.GetCaptain1().PlayerController!.PlayerName} is now selecting 1st captain preference. (First Team or First Player)",
+										onSelect: null,
+										disabled: true,
+										title: "Ready!");
 
 				_captain1ChoiceMenu.Init(_teamManager.GetCaptain1().PlayerController!, false, Captain1ChoiceMenuCallback);
             }
@@ -236,13 +279,13 @@ public class PugPlugin: BasePlugin
         if (result == 0)
         {
             _teamManager.SetTeam1CaptainPickFirstPlayer(false);
-            PlayerManager.PrintToHtmlAll($"Captain {_teamManager.GetCaptain1().PlayerController!.PlayerName} picked First Team choice.", PugConfig.ChatPrefix);
+            HtmlMenuHelper.PrintHtmlMessageToAll(this, message: $"Captain {_teamManager.GetCaptain1().PlayerController!.PlayerName} picked First Team choice.", onSelect: null, disabled: true, title: "Ready!");
             Server.NextFrame(() => _pickFirstSideMenu.Init(player, false, PickFirstSideMenuCallback));
         }
         else
         {
             _teamManager.SetTeam1CaptainPickFirstPlayer(true);
-            PlayerManager.PrintToHtmlAll($"Captain {_teamManager.GetCaptain1().PlayerController!.PlayerName} picked First Player choice.", PugConfig.ChatPrefix);
+            HtmlMenuHelper.PrintHtmlMessageToAll(this, message: $"Captain {_teamManager.GetCaptain1().PlayerController!.PlayerName} picked First Player choice.", onSelect: null, disabled: true, title: "Ready!");
             Server.NextFrame(() => _pickFirstSideMenu.Init(_teamManager.GetCaptain2().PlayerController!, false, PickFirstSideMenuCallback));
         }
     }
@@ -251,11 +294,11 @@ public class PugPlugin: BasePlugin
     {
         if (result == 0)
         {
-			PlayerManager.PrintToHtmlAll($"Captain {player.PlayerName} picked team: Terrorist", PugConfig.ChatPrefix);
+			HtmlMenuHelper.PrintHtmlMessageToAll(this, message: $"Captain {player.PlayerName} picked team: Terrorist", onSelect: null, disabled: true, title: "Ready!"  );
         }
         else
         {
-			PlayerManager.PrintToHtmlAll($"Captain {player.PlayerName} picked team: Counter Terrorist", PugConfig.ChatPrefix);
+			HtmlMenuHelper.PrintHtmlMessageToAll(this, message: $"Captain {player.PlayerName} picked team: Counter Terrorist", onSelect: null, disabled: true, title: "Ready!");
         }
         
         
@@ -289,12 +332,12 @@ public class PugPlugin: BasePlugin
         
         if (_teamManager.GetTeam1CaptainPickFirstPlayer())
         {
-            PlayerManager.PrintToHtmlAll($"Captain {_teamManager.GetCaptain1().PlayerController!.PlayerName}'s turn to pick a player!", PugConfig.ChatPrefix);
+            HtmlMenuHelper.PrintHtmlMessageToAll(this, message: $"Captain {_teamManager.GetCaptain1().PlayerController!.PlayerName}'s turn to pick a player!", onSelect: null, disabled: true, title: "Ready!");
 			Server.NextFrame(() => _captainPickPlayerMenu.Init(_teamManager.GetCaptain1().PlayerController!, false, CaptainPickPlayerMenuCallback));
         }
         else
         {
-            PlayerManager.PrintToHtmlAll($"Captain {_teamManager.GetCaptain2().PlayerController!.PlayerName}'s turn to pick a player!", PugConfig.ChatPrefix);
+            HtmlMenuHelper.PrintHtmlMessageToAll(this, message: $"Captain {_teamManager.GetCaptain2().PlayerController!.PlayerName}'s turn to pick a player!", onSelect: null, disabled: true, title: "Ready!");
             Server.NextFrame(() => _captainPickPlayerMenu.Init(_teamManager.GetCaptain2().PlayerController!, false, CaptainPickPlayerMenuCallback));
         }
     }
@@ -313,20 +356,20 @@ public class PugPlugin: BasePlugin
         if (_teamManager.GetCaptain1().PlayerController!.SteamID == menuPlayer.SteamID) //Team1
         {
             _teamManager.AddPlayerToTeam1(player);
-			PlayerManager.PrintToHtmlAll($"Captain {_teamManager.GetCaptain1().PlayerController!.PlayerName} picked {player.PlayerName}.", PugConfig.ChatPrefix);
+			HtmlMenuHelper.PrintHtmlMessageToAll(this, message: $"Captain {_teamManager.GetCaptain1().PlayerController!.PlayerName} picked {player.PlayerName}.", onSelect: null, disabled: true, title: "Ready!");
             if (_captainPickPlayerMenu.GetMenuItemCount() != 0)
             {
-                PlayerManager.PrintToHtmlAll($"Captain {_teamManager.GetCaptain2().PlayerController!.PlayerName}'s turn to pick a player!", PugConfig.ChatPrefix);
+                HtmlMenuHelper.PrintHtmlMessageToAll(this, message: $"Captain {_teamManager.GetCaptain2().PlayerController!.PlayerName}'s turn to pick a player!", onSelect: null, disabled: true, title: "Ready!");
                 Server.NextFrame(() => _captainPickPlayerMenu.Init(_teamManager.GetCaptain2().PlayerController!, false, CaptainPickPlayerMenuCallback));
             }
         }
         else //Team2
         {
             _teamManager.AddPlayerToTeam2(player);
-			PlayerManager.PrintToHtmlAll($"Captain {_teamManager.GetCaptain2().PlayerController!.PlayerName} picked {player.PlayerName}.", PugConfig.ChatPrefix);
+			HtmlMenuHelper.PrintHtmlMessageToAll(this, message: $"Captain {_teamManager.GetCaptain2().PlayerController!.PlayerName} picked {player.PlayerName}.", onSelect: null, disabled: true, title: "Ready!");
 			if (_captainPickPlayerMenu.GetMenuItemCount() != 0)
             {
-                PlayerManager.PrintToHtmlAll($"Captain {_teamManager.GetCaptain1().PlayerController!.PlayerName}'s turn to pick a player!", PugConfig.ChatPrefix);
+                HtmlMenuHelper.PrintHtmlMessageToAll(this, message: $"Captain {_teamManager.GetCaptain1().PlayerController!.PlayerName}'s turn to pick a player!", onSelect: null, disabled: true, title: "Ready!");
                 Server.NextFrame(() => _captainPickPlayerMenu.Init(_teamManager.GetCaptain1().PlayerController!, false, CaptainPickPlayerMenuCallback));
             }
         }
@@ -335,11 +378,11 @@ public class PugPlugin: BasePlugin
         if (_captainPickPlayerMenu.GetMenuItemCount() == 0)
         {
 			//Assign Players to correct teams
-			PlayerManager.PrintToHtmlAll($"Player selection complete moving players to correct teams.", PugConfig.ChatPrefix);
+			HtmlMenuHelper.PrintHtmlMessageToAll(this, message: $"Player selection complete moving players to correct teams.", onSelect: null, disabled: true, title: "Ready!");
 			_teamManager.MovePlayersToTeams();
             
             //Start Game
-			PlayerManager.PrintToHtmlAll($"Starting Match! glhf", PugConfig.ChatPrefix);
+			HtmlMenuHelper.PrintHtmlMessageToAll(this, message: $"Starting Match! glhf", onSelect: null, disabled: true, title: "Ready!");
 			_gameManager.StartGame();
         }
     }

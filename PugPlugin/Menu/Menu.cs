@@ -4,6 +4,7 @@ using CounterStrikeSharp.API.Modules.Commands;
 using CounterStrikeSharp.API.Modules.Entities;
 using PugPlugin.Config;
 using PugPlugin.Managers;
+using PugPlugin.Managers.PugPlugin.Managers;
 using System.Text;
 
 namespace PugPlugin.Menu;
@@ -13,6 +14,7 @@ public abstract class Menu<T>
     private List<Tuple<string, T>> _menuItems;
     private List<ulong> _playersWithMenuActive;
     private string _title { get; set; }
+    private BasePlugin BasePlugin { get; set; }
     private Dictionary<ulong, int> _currentPage { get; set; } = null!;
     private Dictionary<ulong, bool> _isNextPresent { get; set; } = null!;
     private Dictionary<ulong, int> _nextIndex { get; set; } = null!;
@@ -24,9 +26,10 @@ public abstract class Menu<T>
     
     protected Action<T, CCSPlayerController>? _callbackAction = null;
     
-    protected Menu()
+    protected Menu(BasePlugin basePlugin)
     {
-        _menuItems = new List<Tuple<string, T>>();
+		BasePlugin = basePlugin;
+		_menuItems = new List<Tuple<string, T>>();
         _playersWithMenuActive = new List<ulong>();
         _currentPage = new Dictionary<ulong, int>();
         
@@ -181,25 +184,34 @@ public abstract class Menu<T>
     public void PrintMenu(CCSPlayerController player, bool showTitle, bool showExit, bool doPushLastIndex)
     {
 		var builder = new StringBuilder();
-
+        List<string> messages = new();
 		if (showTitle)
         {
-			PlayerManager.AppentToHtmlFormat(builder, _title);
+            messages.Add(_title);
+			//PlayerManager.AppentToHtmlFormat(builder, _title);
         }
 
         List<Tuple<string, T>> options = GetOptions(showTitle, showExit, player.SteamID, doPushLastIndex);
 
         foreach (Tuple<string, T> option in options)
         {
-			PlayerManager.AppentToHtmlFormat(builder, option.Item1);
+			messages.Add(option.Item1);
+			//PlayerManager.AppentToHtmlFormat(builder, option.Item1);
         }
 
         if (showExit)
         {
-			PlayerManager.AppentToHtmlFormat(builder, $"Exit", "[0]");
+			messages.Add($"[0] Exit");
+			//PlayerManager.AppentToHtmlFormat(builder, $"Exit", "[0]");
         }
 		var currentPageText = builder.ToString();
-		PlayerManager.PrintToHtmlPlayer(player, currentPageText);
+		//PlayerManager.PrintToHtmlPlayer(player, currentPageText);
+		HtmlMenuHelper.PrintHtmlMessagesToPlayer(BasePlugin,
+                            player: player,
+							messages: messages,
+							onSelect: null,
+							disabled: false,
+							title: "Ready!");
 	}
 
     public void Init(CCSPlayerController player, bool showExit, Action<T, CCSPlayerController> callbackAction)
@@ -293,7 +305,14 @@ public abstract class Menu<T>
                 _isExitPresent.Remove(player.SteamID);
                 _previousPageLastIndex.Remove(player.SteamID);
 
-				PlayerManager.PrintToHtmlPlayer(player, $"Menu Exited", PugConfig.ChatPrefix);
+				//PlayerManager.PrintToHtmlPlayer(player, $"Menu Exited", PugConfig.ChatPrefix);
+				HtmlMenuHelper.PrintHtmlMessageToPlayer(BasePlugin,
+							player: player,
+							message: "Menu Exited",
+							onSelect: null,
+							disabled: true,
+							title: "Ready!");
+
 
 			}
             else if (_isPreviousPresent[player.SteamID] && option - 1 == _previousIndex[player.SteamID])

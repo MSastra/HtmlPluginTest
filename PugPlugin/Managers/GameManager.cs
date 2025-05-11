@@ -1,11 +1,17 @@
 ﻿using CounterStrikeSharp.API;
+using CounterStrikeSharp.API.Core;
 using PugPlugin.Config;
+using PugPlugin.Managers.PugPlugin.Managers;
 
 namespace PugPlugin.Managers;
 
 public class GameManager
 {
-
+    private BasePlugin BasePlugin { get; set; }
+    public GameManager(BasePlugin basePlugin) 
+    { 
+        BasePlugin = basePlugin;
+    }
     private Boolean _isStarted;
     private int _gameState = 0; // 0 - Warmup, 1 - captains selection, 2 - setup, 3 - game
     
@@ -22,7 +28,7 @@ public class GameManager
 
     public void StartGame()
     {
-		PlayerManager.PrintToHtmlAll($"{PugConfig.ChatPrefix} Teams are selected! Starting Game!");
+        HtmlMenuHelper.PrintHtmlMessageToAll(BasePlugin, message: $"{PugConfig.ChatPrefix} Teams are selected! Starting Game!", onSelect: null, disabled: true, title: null);
 
 		_gameState = 3;
         Server.ExecuteCommand("bot_autodifficulty_threshold_high 0.0");
@@ -136,10 +142,10 @@ public class GameManager
     
     public void StartSetupRound()
     {
-        PlayerManager.PrintToHtmlAll($"{PugConfig.ChatPrefix} Captains are selected. starting team selection!");
-        
-        //setup setup warmup, reset settings from captain round
-        _gameState = 2;
+        HtmlMenuHelper.PrintHtmlMessageToAll(BasePlugin, message: $"{PugConfig.ChatPrefix} Captains are selected. starting team selection!", onSelect: null, disabled: true, title: null);
+
+		//setup setup warmup, reset settings from captain round
+		_gameState = 2;
         Server.ExecuteCommand("mp_timelimit 5");
         Server.ExecuteCommand("mp_ignore_round_win_conditions 0");
         Server.ExecuteCommand("sv_talk_enemy_living 0");
@@ -165,8 +171,7 @@ public class GameManager
     public void StartCaptainSelectRound()
     {
         _isStarted = true;
-		PlayerManager.PrintToHtmlAll($"{PugConfig.ChatPrefix} All players are ready, starting captain selection knife round!");
-
+        HtmlMenuHelper.PrintHtmlMessageToAll(BasePlugin, message: $"{PugConfig.ChatPrefix} All players are ready, starting captain selection knife round!", onSelect: null, disabled: true, title: null);
         
         //setup captains match
         _gameState = 1;

@@ -1,11 +1,12 @@
-﻿using PugPlugin.Config;
+﻿using CounterStrikeSharp.API.Core;
+using PugPlugin.Config;
 
 namespace PugPlugin.Menu.Setup;
 
 public class TestMenu : Menu<int>
 {
-    public TestMenu()
-    {
+    public TestMenu(BasePlugin basePlugin) : base(basePlugin)
+	{
         SetTitle($"{PugConfig.ChatPrefix} TestMenu:");
         AddMenuItem("0", 0);
         AddMenuItem("1", 1);

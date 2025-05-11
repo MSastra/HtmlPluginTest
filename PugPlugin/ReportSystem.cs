@@ -250,5 +250,3 @@ public class Config
     public int Target { get; set; }
     public bool IsSelectedReason { get; set; }
 }*/
-ReportSystem.cs
-10 KB

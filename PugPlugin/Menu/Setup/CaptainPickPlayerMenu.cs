@@ -6,8 +6,8 @@ namespace PugPlugin.Menu.Setup;
 
 public class CaptainPickPlayerMenu : Menu<ulong>
 {
-    public CaptainPickPlayerMenu()
-    {
+    public CaptainPickPlayerMenu(BasePlugin basePlugin) : base(basePlugin)
+	{
         SetTitle($"{PugConfig.ChatPrefix} Pick a player for your team:");
     }
 

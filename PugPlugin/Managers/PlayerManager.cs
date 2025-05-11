@@ -1,8 +1,7 @@
 ﻿using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
-using PugPlugin.Config;
+using CounterStrikeSharp.API.Modules.Menu;
 using PugPlugin.Entities;
-using System.Text;
 
 namespace PugPlugin.Managers;
 
@@ -100,23 +99,6 @@ public class PlayerManager
             return false;
         }
 	}
-
-    public static void PrintToHtmlAll(string message, string option = "", string color = "grey") 
-    { 
-		foreach (var player in Utilities.GetPlayers())
-		{
-			player.PrintToCenterHtml($"<font color='yellow'>{option}</font> <font color='{color}'>{message}</font>");
-		}
-	}
-
-	public static void PrintToHtmlPlayer(CCSPlayerController player, string message, string option = "", string color = "grey")
-	{
-        player.PrintToCenterHtml($"<font color='yellow'>{option}</font> <font color='{color}'>{message}</font>");
-	}
-
-	public static void AppentToHtmlFormat(StringBuilder builder, string message, string option = "", string color = "grey")
-	{
-		builder.AppendFormat($"<font color='yellow'>{option}</font> <font color='{color}'>{message}</font>");
-		builder.AppendLine("<br>");
-	}
+	
 }
+
