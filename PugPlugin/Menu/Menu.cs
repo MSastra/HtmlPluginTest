@@ -4,6 +4,7 @@ using CounterStrikeSharp.API.Modules.Commands;
 using CounterStrikeSharp.API.Modules.Entities;
 using PugPlugin.Config;
 using PugPlugin.Managers;
+using System.Text;
 
 namespace PugPlugin.Menu;
 
@@ -179,23 +180,27 @@ public abstract class Menu<T>
 
     public void PrintMenu(CCSPlayerController player, bool showTitle, bool showExit, bool doPushLastIndex)
     {
-        if (showTitle)
+		var builder = new StringBuilder();
+
+		if (showTitle)
         {
-            PlayerManager.PrintToHtmlPlayer(player, _title);
+			PlayerManager.AppentToHtmlFormat(builder, _title);
         }
 
         List<Tuple<string, T>> options = GetOptions(showTitle, showExit, player.SteamID, doPushLastIndex);
 
         foreach (Tuple<string, T> option in options)
         {
-            PlayerManager.PrintToHtmlPlayer(player, option.Item1);
+			PlayerManager.AppentToHtmlFormat(builder, option.Item1);
         }
 
         if (showExit)
         {
-            PlayerManager.PrintToHtmlPlayer(player, $"Exit", "[0]");
+			PlayerManager.AppentToHtmlFormat(builder, $"Exit", "[0]");
         }
-    }
+		var currentPageText = builder.ToString();
+		PlayerManager.PrintToHtmlPlayer(player, currentPageText);
+	}
 
     public void Init(CCSPlayerController player, bool showExit, Action<T, CCSPlayerController> callbackAction)
     {

@@ -109,8 +109,14 @@ public class PlayerManager
 		}
 	}
 
-	public static void PrintToHtmlPlayer(this CCSPlayerController player, string message, string option = "", string color = "grey")
+	public static void PrintToHtmlPlayer(CCSPlayerController player, string message, string option = "", string color = "grey")
 	{
         player.PrintToCenterHtml($"<font color='yellow'>{option}</font> <font color='{color}'>{message}</font>");
+	}
+
+	public static void AppentToHtmlFormat(StringBuilder builder, string message, string option = "", string color = "grey")
+	{
+		builder.AppendFormat($"<font color='yellow'>{option}</font> <font color='{color}'>{message}</font>");
+		builder.AppendLine("<br>");
 	}
 }
