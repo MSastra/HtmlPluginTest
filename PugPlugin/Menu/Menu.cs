@@ -184,11 +184,12 @@ public abstract class Menu<T>
 	{
 		var builder = new StringBuilder();
 		List<string> messages = new();
-		if (showTitle)
-		{
-			messages.Add(_title);
-			//PlayerManager.AppentToHtmlFormat(builder, _title);
-		}
+		//if (showTitle)
+		//{
+		//	messages.Add(_title);
+		//	//PlayerManager.AppentToHtmlFormat(builder, _title);
+		//}
+		//}
 
 		List<Tuple<string, T>> options = GetOptions(showTitle, showExit, player.SteamID, doPushLastIndex);
 
@@ -210,7 +211,7 @@ public abstract class Menu<T>
 							messages: messages,
 							onSelect: null,
 							disabled: false,
-							title: "Ready!");
+							title: _title);
 	}
 
 	public void Init(CCSPlayerController player, bool showExit, Action<T, CCSPlayerController> callbackAction)
